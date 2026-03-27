@@ -1,14 +1,42 @@
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import ScoreInput from '../../components/ScoreInput';
+import { useScoreStore } from '../../store/useScoreStore';
+import { useTheme } from '../../lib/theme';
+import AdBanner from '../../components/AdBanner';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+export default function ScoreInputScreen() {
+  const router = useRouter();
+  const store = useScoreStore();
+  const { colors } = useTheme();
 
-export default function TabOneScreen() {
+  const handleCalculate = () => {
+    // 최소 하나의 점수가 입력되었는지 확인
+    const hasKorean = Object.values(store.koreanScore).some(v => v !== undefined && v !== null);
+    const hasMath = Object.values(store.mathScore).some(v => v !== undefined && v !== null);
+
+    if (!hasKorean && !hasMath) {
+      Alert.alert('알림', '국어 또는 수학 점수를 입력해주세요.');
+      return;
+    }
+
+    store.calculateResults();
+    router.push('/(tabs)/results');
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <ScoreInput />
+      <AdBanner />
+      <View style={[styles.buttonContainer, { backgroundColor: colors.background, borderTopColor: colors.border }]}>
+        <TouchableOpacity style={[styles.calculateButton, { backgroundColor: colors.primary }]} onPress={handleCalculate}>
+          <Text style={styles.calculateButtonText}>지원 가능 대학 보기</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.resetButton, { backgroundColor: colors.card, borderColor: colors.inputBorder }]} onPress={store.resetScores}>
+          <Text style={[styles.resetButtonText, { color: colors.textTertiary }]}>초기화</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -16,16 +44,41 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F8F9FA',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 10,
+    backgroundColor: '#F8F9FA',
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+  },
+  calculateButton: {
+    flex: 3,
+    backgroundColor: '#4A90D9',
+    paddingVertical: 16,
+    borderRadius: 14,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  calculateButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  resetButton: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingVertical: 16,
+    borderRadius: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  resetButtonText: {
+    color: '#999',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

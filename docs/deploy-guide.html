@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>어대갈까 - 배포 가이드</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, 'Pretendard', sans-serif; background: #F8F9FA; color: #1a1a1a; line-height: 1.7; }
+    .header { background: linear-gradient(135deg, #4A90D9, #357ABD); color: #fff; padding: 48px 24px 36px; text-align: center; }
+    .header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .header p { font-size: 15px; opacity: 0.9; }
+    .progress-bar { max-width: 760px; margin: -20px auto 0; padding: 0 20px; }
+    .progress-inner { background: #fff; border-radius: 16px; padding: 20px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .progress-inner h3 { font-size: 14px; color: #666; margin-bottom: 12px; }
+    .bar-bg { height: 8px; background: #E8E8E8; border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, #4A90D9, #2E7D32); border-radius: 4px; transition: width 0.3s; }
+    .steps-count { font-size: 13px; color: #999; margin-top: 8px; text-align: right; }
+    .container { max-width: 760px; margin: 24px auto; padding: 0 20px 60px; }
+    .step-section { margin-bottom: 32px; }
+    .step-section h2 { font-size: 20px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #4A90D9; color: #fff; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+    .step-time { font-size: 13px; color: #999; margin-bottom: 16px; margin-left: 42px; }
+    .card { background: #fff; border-radius: 14px; padding: 20px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .card h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .card ol, .card ul { padding-left: 20px; }
+    .card li { margin-bottom: 8px; font-size: 14px; }
+    .card li strong { color: #4A90D9; }
+    .link-btn { display: inline-block; background: #4A90D9; color: #fff !important; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-top: 8px; transition: background 0.2s; }
+    .link-btn:hover { background: #357ABD; }
+    .link-btn.secondary { background: #F0F0F0; color: #333 !important; }
+    .link-btn.secondary:hover { background: #E0E0E0; }
+    .code-block { background: #1E1E1E; color: #D4D4D4; border-radius: 10px; padding: 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; overflow-x: auto; margin: 10px 0; line-height: 1.6; }
+    .code-block .comment { color: #6A9955; }
+    .code-block .string { color: #CE9178; }
+    .code-block .keyword { color: #569CD6; }
+    .warn { background: #FFF3E0; border-left: 4px solid #FF9800; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 13px; }
+    .success { background: #E8F5E9; border-left: 4px solid #4CAF50; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 13px; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
+    .check-item:last-child { border-bottom: none; }
+    .check-item input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: #4A90D9; flex-shrink: 0; }
+    .file-path { background: #F5F5F5; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 13px; color: #C62828; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+    .tag.required { background: #FFEBEE; color: #C62828; }
+    .tag.optional { background: #E3F2FD; color: #1565C0; }
+    @media (max-width: 600px) {
+      .header { padding: 36px 16px 28px; }
+      .header h1 { font-size: 22px; }
+      .container { padding: 0 12px 40px; }
+      .card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>어대갈까 배포 가이드</h1>
+  <p>앱스토어 & 플레이스토어 출시까지 단계별 체크리스트</p>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-inner">
+    <h3>전체 진행률</h3>
+    <div class="bar-bg"><div class="bar-fill" id="progressFill" style="width: 0%"></div></div>
+    <div class="steps-count" id="stepsCount">0 / 0 완료</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- STEP 1 -->
+  <div class="step-section">
+    <h2><span class="step-num">1</span> GitHub Pages 개인정보처리방침 배포</h2>
+    <div class="step-time">~5분 <span class="tag required">필수</span></div>
+
+    <div class="card">
+      <h3>GitHub 레포지토리 설정</h3>
+      <ol>
+        <li>GitHub에 <strong>jeongsi-calculator</strong> 레포 생성 (이미 있으면 스킵)
+          <br><a href="https://github.com/new" target="_blank" class="link-btn" style="margin-top:6px">GitHub 새 레포 만들기</a>
+        </li>
+        <li>로컬에서 push:
+          <div class="code-block">
+<span class="keyword">cd</span> ~/jeongsi-calculator<br>
+<span class="keyword">git</span> remote add origin https://github.com/YOUR_USERNAME/jeongsi-calculator.git<br>
+<span class="keyword">git</span> push -u origin main
+          </div>
+        </li>
+        <li>GitHub 레포 > <strong>Settings</strong> > <strong>Pages</strong>
+          <br><a href="https://github.com/" target="_blank" class="link-btn secondary">GitHub 열기</a>
+        </li>
+        <li>Source를 <strong>"Deploy from a branch"</strong> 선택</li>
+        <li>Branch: <strong>main</strong>, Folder: <strong>/docs</strong> 선택 > Save</li>
+        <li>1~2분 후 URL 확인: <code>https://YOUR_USERNAME.github.io/jeongsi-calculator/</code></li>
+      </ol>
+      <div class="success">이 URL을 App Store Connect와 Play Console의 개인정보처리방침 URL에 입력합니다.</div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-section">
+    <h2><span class="step-num">2</span> RevenueCat 설정</h2>
+    <div class="step-time">~30분 <span class="tag required">필수</span></div>
+
+    <div class="card">
+      <h3>2-1. RevenueCat 계정 & 프로젝트 생성</h3>
+      <ol>
+        <li><a href="https://app.revenuecat.com/signup" target="_blank" class="link-btn">RevenueCat 가입하기</a></li>
+        <li>로그인 후 <strong>"Create New Project"</strong> 클릭</li>
+        <li>프로젝트 이름: <strong>어대갈까</strong></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>2-2. Apple App Store 연결</h3>
+      <ol>
+        <li>RevenueCat 프로젝트 > <strong>Apps</strong> > <strong>+ New App</strong> > <strong>App Store</strong></li>
+        <li>App Name: <strong>어대갈까</strong></li>
+        <li>Bundle ID: <code>com.thinkoutsidethebox.jeongsicalculator</code></li>
+        <li>App Store Connect Shared Secret 입력:
+          <br><a href="https://appstoreconnect.apple.com/" target="_blank" class="link-btn secondary">App Store Connect 열기</a>
+          <br>앱 > 일반 > 앱 정보 > App-Specific Shared Secret > Generate
+        </li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>2-3. Google Play Store 연결</h3>
+      <ol>
+        <li>RevenueCat 프로젝트 > <strong>Apps</strong> > <strong>+ New App</strong> > <strong>Play Store</strong></li>
+        <li>Package Name: <code>com.thinkoutsidethebox.jeongsicalculator</code></li>
+        <li>Service Account JSON 업로드 (Step 4에서 생성)
+          <br><a href="https://play.google.com/console" target="_blank" class="link-btn secondary">Play Console 열기</a>
+        </li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>2-4. 상품(Entitlement) 설정</h3>
+      <ol>
+        <li>RevenueCat > <strong>Entitlements</strong> > <strong>+ New</strong></li>
+        <li>Identifier: <code>premium</code></li>
+        <li><strong>Offerings</strong> > <strong>default</strong> > 패키지 2개 추가:
+          <ul>
+            <li><strong>$rc_monthly</strong> - 월간 구독 상품 연결</li>
+            <li><strong>$rc_annual</strong> - 연간 구독 상품 연결</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>2-5. API Key를 코드에 적용</h3>
+      <ol>
+        <li>RevenueCat > 프로젝트 > <strong>API Keys</strong></li>
+        <li><strong>Public app-specific API keys</strong> 복사 (iOS용, Android용 각각)</li>
+        <li>파일 수정: <span class="file-path">lib/purchases.ts</span>
+          <div class="code-block">
+<span class="comment">// 21~22번째 줄의 test_ 키를 교체</span><br>
+<span class="keyword">const</span> REVENUECAT_IOS_KEY = <span class="string">'appl_실제키여기에붙여넣기'</span>;<br>
+<span class="keyword">const</span> REVENUECAT_ANDROID_KEY = <span class="string">'goog_실제키여기에붙여넣기'</span>;
+          </div>
+        </li>
+      </ol>
+      <div class="warn">현재 test_ 키가 들어있습니다. 반드시 프로덕션 키로 교체해야 합니다.</div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-section">
+    <h2><span class="step-num">3</span> App Store Connect 구독 상품 등록</h2>
+    <div class="step-time">~1시간 <span class="tag required">필수 (iOS)</span></div>
+
+    <div class="card">
+      <h3>3-1. 앱 등록</h3>
+      <ol>
+        <li><a href="https://appstoreconnect.apple.com/apps" target="_blank" class="link-btn">App Store Connect 열기</a></li>
+        <li><strong>"+"</strong> > <strong>New App</strong></li>
+        <li>Platform: iOS</li>
+        <li>Name: <strong>어대갈까</strong></li>
+        <li>Bundle ID: <code>com.thinkoutsidethebox.jeongsicalculator</code></li>
+        <li>SKU: <code>jeongsicalculator</code></li>
+        <li>Primary Language: Korean</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>3-2. 인앱 구독 상품 생성</h3>
+      <ol>
+        <li>앱 페이지 > 좌측 <strong>Subscriptions</strong></li>
+        <li><strong>Subscription Group</strong> 생성: <code>premium_group</code></li>
+        <li>상품 1 - 월간:
+          <ul>
+            <li>Reference Name: <strong>Premium Monthly</strong></li>
+            <li>Product ID: <code>premium_monthly</code></li>
+            <li>Duration: <strong>1 Month</strong></li>
+            <li>Price: <strong>4,900원 (Tier 5)</strong></li>
+            <li>구독 표시 이름: <strong>프리미엄 월간</strong></li>
+          </ul>
+        </li>
+        <li>상품 2 - 연간:
+          <ul>
+            <li>Reference Name: <strong>Premium Yearly</strong></li>
+            <li>Product ID: <code>premium_yearly</code></li>
+            <li>Duration: <strong>1 Year</strong></li>
+            <li>Price: <strong>39,000원 (Tier 39)</strong></li>
+            <li>구독 표시 이름: <strong>프리미엄 연간</strong></li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>3-3. 앱 정보 입력</h3>
+      <ol>
+        <li><strong>App Information</strong>:
+          <ul>
+            <li>Category: Education</li>
+            <li>개인정보처리방침 URL: GitHub Pages URL 입력</li>
+          </ul>
+        </li>
+        <li><strong>Pricing and Availability</strong>: Free</li>
+        <li><strong>App Review Information</strong>:
+          <ul>
+            <li>연락처: seonghun8476@gmail.com</li>
+            <li>Review Notes: "수능 점수를 입력하면 정시 지원 가능 대학을 보여주는 교육용 앱입니다"</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step-section">
+    <h2><span class="step-num">4</span> Google Play Console 설정</h2>
+    <div class="step-time">~1시간 <span class="tag required">필수 (Android)</span></div>
+
+    <div class="card">
+      <h3>4-1. 앱 등록</h3>
+      <ol>
+        <li><a href="https://play.google.com/console" target="_blank" class="link-btn">Play Console 열기</a></li>
+        <li><strong>Create app</strong></li>
+        <li>App name: <strong>어대갈까 - 정시 대학 계산기</strong></li>
+        <li>Default language: Korean</li>
+        <li>App / Game: App</li>
+        <li>Free / Paid: Free</li>
+        <li>Declaration 체크 후 Create</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>4-2. Google Service Account 생성 (자동 배포용)</h3>
+      <ol>
+        <li><a href="https://console.cloud.google.com/iam-admin/serviceaccounts" target="_blank" class="link-btn">Google Cloud Console 열기</a></li>
+        <li>프로젝트 선택 (Play Console과 연결된 프로젝트)</li>
+        <li><strong>+ CREATE SERVICE ACCOUNT</strong></li>
+        <li>Name: <code>eas-submit</code></li>
+        <li>Role: 안 줘도 됨 (Skip)</li>
+        <li>생성된 계정 클릭 > <strong>Keys</strong> > <strong>Add Key</strong> > <strong>JSON</strong></li>
+        <li>다운로드된 JSON 파일을 프로젝트 루트에 저장:
+          <div class="code-block">
+<span class="keyword">mv</span> ~/Downloads/service-account-*.json ~/jeongsi-calculator/google-service-account.json
+          </div>
+        </li>
+        <li>Play Console > <strong>Settings</strong> > <strong>API access</strong> > 서비스 계정 연결
+          <br><a href="https://play.google.com/console/developers/api-access" target="_blank" class="link-btn secondary">API Access 설정</a>
+        </li>
+        <li>서비스 계정에 <strong>"Admin (all permissions)"</strong> 부여</li>
+      </ol>
+      <div class="warn">google-service-account.json은 .gitignore에 추가하세요! 절대 GitHub에 올리면 안 됩니다.</div>
+    </div>
+
+    <div class="card">
+      <h3>4-3. 구독 상품 등록</h3>
+      <ol>
+        <li>Play Console > 앱 > <strong>Monetize</strong> > <strong>Subscriptions</strong></li>
+        <li><strong>Create subscription</strong></li>
+        <li>상품 1 - 월간:
+          <ul>
+            <li>Product ID: <code>premium_monthly</code></li>
+            <li>Name: <strong>프리미엄 월간</strong></li>
+            <li>Base plan 추가: 1 Month, 4,900원</li>
+          </ul>
+        </li>
+        <li>상품 2 - 연간:
+          <ul>
+            <li>Product ID: <code>premium_yearly</code></li>
+            <li>Name: <strong>프리미엄 연간</strong></li>
+            <li>Base plan 추가: 1 Year, 39,000원</li>
+          </ul>
+        </li>
+        <li><strong>Activate</strong></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>4-4. 스토어 등록 정보</h3>
+      <ol>
+        <li><strong>Main store listing</strong>:
+          <ul>
+            <li>App name: 어대갈까 - 정시 대학 계산기</li>
+            <li>Short description: 수능 점수로 합격 가능 대학을 알려드립니다</li>
+            <li>Full description: <span class="file-path">store-listing.md</span> 내용 복사</li>
+          </ul>
+        </li>
+        <li><strong>Content rating</strong> 설문 완료</li>
+        <li><strong>Target audience</strong>: 18세 이상</li>
+        <li><strong>Data safety</strong>: 개인정보 수집 항목 입력</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step-section">
+    <h2><span class="step-num">5</span> 앱 스크린샷 캡처</h2>
+    <div class="step-time">~20분 <span class="tag required">필수</span></div>
+
+    <div class="card">
+      <h3>필요한 스크린샷</h3>
+      <p>최소 5장, 아래 화면을 캡처하세요:</p>
+      <ol>
+        <li><strong>점수 입력 화면</strong> - 수능 점수 입력 폼</li>
+        <li><strong>결과 화면</strong> - 가/나/다군 필터 + 대학 카드 목록</li>
+        <li><strong>대학 상세</strong> - 3개년 추이 그래프</li>
+        <li><strong>탐색 화면</strong> - 대학별/학과별 탐색</li>
+        <li><strong>비교 화면</strong> - 관심대학 비교 테이블</li>
+      </ol>
+
+      <h3 style="margin-top:16px">iOS 시뮬레이터로 캡처</h3>
+      <div class="code-block">
+<span class="comment"># 앱 실행</span><br>
+<span class="keyword">cd</span> ~/jeongsi-calculator<br>
+<span class="keyword">npx</span> expo start --ios<br><br>
+<span class="comment"># 시뮬레이터에서 Cmd+S로 스크린샷</span><br>
+<span class="comment"># 저장 위치: ~/Desktop</span>
+      </div>
+
+      <h3 style="margin-top:16px">필요 사이즈</h3>
+      <table style="width:100%; font-size:13px; border-collapse:collapse; margin-top:8px;">
+        <tr style="background:#F0F0F0"><th style="padding:8px; text-align:left">스토어</th><th style="text-align:left">기기</th><th style="text-align:left">사이즈</th></tr>
+        <tr><td style="padding:8px">App Store</td><td>iPhone 6.7"</td><td>1290 x 2796</td></tr>
+        <tr style="background:#FAFAFA"><td style="padding:8px">App Store</td><td>iPhone 6.5"</td><td>1284 x 2778</td></tr>
+        <tr><td style="padding:8px">Play Store</td><td>Phone</td><td>최소 1080px 너비</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step-section">
+    <h2><span class="step-num">6</span> EAS Build & Submit</h2>
+    <div class="step-time">~30분 <span class="tag required">필수</span></div>
+
+    <div class="card">
+      <h3>6-1. EAS CLI 설치 & 로그인</h3>
+      <div class="code-block">
+<span class="keyword">npm</span> install -g eas-cli<br>
+<span class="keyword">eas</span> login
+      </div>
+      <a href="https://expo.dev/signup" target="_blank" class="link-btn secondary">Expo 계정 만들기</a>
+    </div>
+
+    <div class="card">
+      <h3>6-2. iOS 빌드 & 제출</h3>
+      <div class="code-block">
+<span class="comment"># 프로덕션 빌드 (Apple Developer 계정 필요)</span><br>
+<span class="keyword">eas</span> build --platform ios --profile production<br><br>
+<span class="comment"># 빌드 완료 후 App Store Connect에 제출</span><br>
+<span class="keyword">eas</span> submit --platform ios --latest
+      </div>
+      <div class="warn">Apple Developer Program 가입 필요 ($99/년)
+        <br><a href="https://developer.apple.com/programs/" target="_blank" style="color:#E65100">developer.apple.com/programs</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>6-3. Android 빌드 & 제출</h3>
+      <div class="code-block">
+<span class="comment"># 프로덕션 빌드 (AAB)</span><br>
+<span class="keyword">eas</span> build --platform android --profile production<br><br>
+<span class="comment"># 빌드 완료 후 Play Store에 제출</span><br>
+<span class="keyword">eas</span> submit --platform android --latest
+      </div>
+      <div class="warn">Google Play Developer 등록 필요 ($25 일회성)
+        <br><a href="https://play.google.com/console/signup" target="_blank" style="color:#E65100">play.google.com/console/signup</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>6-4. 스토어 심사 제출</h3>
+      <ol>
+        <li><strong>App Store Connect</strong>:
+          <ul>
+            <li>앱 > Version > 스크린샷 업로드</li>
+            <li>앱 설명, 키워드 입력</li>
+            <li><strong>"Submit for Review"</strong></li>
+            <li>심사 기간: 보통 1~3일</li>
+          </ul>
+        </li>
+        <li><strong>Play Console</strong>:
+          <ul>
+            <li>앱 > Production > <strong>Create new release</strong></li>
+            <li>AAB 업로드 (EAS submit으로 이미 됨)</li>
+            <li>Release notes: "정시 대학 계산기 첫 출시"</li>
+            <li><strong>"Start rollout to Production"</strong></li>
+            <li>심사 기간: 보통 1~7일 (첫 앱은 더 오래 걸릴 수 있음)</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step-section">
+    <h2><span class="step-num">7</span> 출시 후 확인</h2>
+    <div class="step-time">~10분 <span class="tag optional">권장</span></div>
+
+    <div class="card">
+      <h3>출시 후 체크리스트</h3>
+      <ol>
+        <li>실제 기기에서 앱 다운로드 테스트</li>
+        <li>로그인 (Google / 카카오 / Apple) 정상 동작 확인</li>
+        <li>점수 입력 > 결과 확인 > 가/나/다군 필터 테스트</li>
+        <li>프리미엄 구독 결제 테스트 (Sandbox)</li>
+        <li>Supabase Dashboard에서 데이터 로딩 확인
+          <br><a href="https://supabase.com/dashboard/project/qyksueckyxpihmmbiyaj" target="_blank" class="link-btn secondary">Supabase 대시보드</a>
+        </li>
+        <li>RevenueCat Dashboard에서 구독 현황 확인
+          <br><a href="https://app.revenuecat.com/" target="_blank" class="link-btn secondary">RevenueCat 대시보드</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- FINAL CHECKLIST -->
+  <div class="step-section">
+    <h2 style="margin-bottom: 16px;">최종 체크리스트</h2>
+    <div class="card">
+      <div class="check-item"><input type="checkbox" id="c1" onchange="updateProgress()"><label for="c1">GitHub Pages 개인정보처리방침 URL 확보</label></div>
+      <div class="check-item"><input type="checkbox" id="c2" onchange="updateProgress()"><label for="c2">RevenueCat 프로젝트 생성 완료</label></div>
+      <div class="check-item"><input type="checkbox" id="c3" onchange="updateProgress()"><label for="c3">RevenueCat iOS/Android 앱 연결</label></div>
+      <div class="check-item"><input type="checkbox" id="c4" onchange="updateProgress()"><label for="c4">RevenueCat Entitlement(premium) + Offering 설정</label></div>
+      <div class="check-item"><input type="checkbox" id="c5" onchange="updateProgress()"><label for="c5">lib/purchases.ts에 프로덕션 API Key 적용</label></div>
+      <div class="check-item"><input type="checkbox" id="c6" onchange="updateProgress()"><label for="c6">App Store Connect 앱 등록</label></div>
+      <div class="check-item"><input type="checkbox" id="c7" onchange="updateProgress()"><label for="c7">App Store 구독 상품 2개 등록 (월간/연간)</label></div>
+      <div class="check-item"><input type="checkbox" id="c8" onchange="updateProgress()"><label for="c8">Play Console 앱 등록</label></div>
+      <div class="check-item"><input type="checkbox" id="c9" onchange="updateProgress()"><label for="c9">Google Service Account JSON 생성 & 프로젝트에 저장</label></div>
+      <div class="check-item"><input type="checkbox" id="c10" onchange="updateProgress()"><label for="c10">Play Store 구독 상품 2개 등록 (월간/연간)</label></div>
+      <div class="check-item"><input type="checkbox" id="c11" onchange="updateProgress()"><label for="c11">스크린샷 5장 캡처</label></div>
+      <div class="check-item"><input type="checkbox" id="c12" onchange="updateProgress()"><label for="c12">EAS Build iOS 완료</label></div>
+      <div class="check-item"><input type="checkbox" id="c13" onchange="updateProgress()"><label for="c13">EAS Build Android 완료</label></div>
+      <div class="check-item"><input type="checkbox" id="c14" onchange="updateProgress()"><label for="c14">App Store 심사 제출</label></div>
+      <div class="check-item"><input type="checkbox" id="c15" onchange="updateProgress()"><label for="c15">Play Store 심사 제출</label></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // 체크리스트 상태 저장/복원
+  const STORAGE_KEY = 'deploy-checklist';
+
+  function loadChecklist() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const checked = JSON.parse(saved);
+        checked.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.checked = true;
+        });
+      }
+    } catch(e) {}
+    updateProgress();
+  }
+
+  function saveChecklist() {
+    const checked = [];
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      if (cb.checked) checked.push(cb.id);
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(checked));
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('input[type="checkbox"]');
+    const done = document.querySelectorAll('input[type="checkbox"]:checked');
+    const pct = all.length ? Math.round((done.length / all.length) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('stepsCount').textContent = done.length + ' / ' + all.length + ' 완료 (' + pct + '%)';
+    saveChecklist();
+  }
+
+  loadChecklist();
+</script>
+
+</body>
+</html>

@@ -33,6 +33,9 @@ yarn-error.*
 # local env files
 .env*.local
 
+# Google Service Account (절대 올리지 말 것)
+google-service-account.json
+
 # typescript
 *.tsbuildinfo
 
